@@ -1,0 +1,44 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import g from '../../data/guides.json';
+const m = g.metals; const money=(v)=>`$${v.toFixed(2)}`; const usd=(v)=>v==null?'—':`$${Math.round(v).toLocaleString('en-US')}`;
+const order = ['Catastrophic','Bronze','Expanded Bronze','Silver','Gold'].filter(k=>m[k]);
+const silverGoldGap = (m['Silver'].prem40_med - m['Gold'].prem40_med);
+---
+<Layout title={`Bronze vs Silver vs Gold in Texas: Real Premiums & Deductibles (${meta.plan_year}) — RateTerrain`} desc={`Texas ${meta.plan_year} filings compared: premiums, deductibles and out-of-pocket caps by metal level — including why the median Gold plan costs ${money(Math.abs(silverGoldGap))} less than Silver.`} path="/texas/bronze-vs-silver/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Choosing a tier · Plan year {meta.plan_year}</p>
+    <h1>Bronze, Silver, or Gold: what the filings actually say</h1>
+    <p class="lede">Metal levels are a trade: pay monthly, or pay when you need care. Texas {meta.plan_year} data adds a twist most shoppers miss — the <b>median Gold plan costs {money(Math.abs(silverGoldGap))} less per month than the median Silver</b>. Here is the whole picture in one table.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files (standard plan variants) · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <h2>The trade, in numbers (age 40, statewide)</h2>
+    <table>
+      <thead><tr><th>Metal level</th><th class="num">Plans</th><th class="num">Lowest premium</th><th class="num">Median premium</th><th class="num">Median deductible</th><th class="num">Median out-of-pocket cap</th></tr></thead>
+      <tbody>
+        {order.map(k => <tr><td>{k}</td><td class="num">{m[k].plans}</td><td class="num">{money(m[k].prem40_min)}</td><td class="num">{money(m[k].prem40_med)}</td><td class="num">{usd(m[k].ded_med)}</td><td class="num">{usd(m[k].moop_med)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">Premiums for one non-smoking 40-year-old, before subsidies; deductibles and caps are in-network individual figures from each plan's standard variant. Premiums scale with age (<a href="/texas/health-insurance-cost-by-age/">see the curve</a>); deductibles don't.</p>
+  </section>
+
+  <section class="prose">
+    <h2>Why Gold can undercut Silver here</h2>
+    <p>Silver plans are where the law delivers extra cost-sharing discounts to lower-income enrollees, and insurers price the expected cost of those discounts into Silver premiums. The result in Texas's {meta.plan_year} filings: Silver carries a premium surcharge while Gold — which covers more of your bills — can cost less per month. If you <b>don't</b> qualify for cost-sharing reductions, comparing your shortlist's Gold options against Silver is one of the highest-value five minutes in this whole process.</p>
+    <h2>A quick way to think about the choice</h2>
+    <ul>
+      <li><b>Rarely see a doctor, have savings for a bad year</b> → Bronze/Expanded Bronze: lowest premiums, but plan on the deductible (~{usd(m['Expanded Bronze']?.ded_med ?? m['Bronze'].ded_med)}) being yours to pay first.</li>
+      <li><b>Qualify for cost-sharing reductions (income-based)</b> → Silver, full stop: the discounts exist only there and can shrink that deductible dramatically.</li>
+      <li><b>Regular prescriptions, ongoing care, or just want predictability</b> → price out Gold: highest baseline coverage, and in Texas often <em>not</em> the highest premium.</li>
+      <li><b>Under 30</b> → Catastrophic is on the table ({money(m['Catastrophic'].prem40_min)}+ even at 40's rates) — see the <a href="/texas/health-insurance-turning-26/">turning-26 guide</a>.</li>
+    </ul>
+    <p>Total yearly exposure = premiums × 12 + what you'd actually spend toward the deductible in a realistic bad year. Run both numbers before deciding; the cheapest column is rarely cheapest in a hospital year.</p>
+  </section>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

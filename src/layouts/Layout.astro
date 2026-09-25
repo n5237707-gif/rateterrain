@@ -1,0 +1,59 @@
+---
+// SEO-agenty predlagayut novye title/description cherez seo/overrides.json.
+// Fayl pravitsya tolko cherez Pull Request; esli zapisi net - beryom propsy stranicy.
+// titleLocked - stranica sama znaet svoy zagolovok, togda override ego ne perebivaet.
+import overrides from '../../seo/overrides.json';
+
+const { title, desc, path = '/', titleLocked = false } = Astro.props;
+const canonical = `https://rateterrain.com${path}`;
+
+const raw = Astro.url.pathname;
+const withSlash = raw.endsWith('/') ? raw : raw + '/';
+const noSlash = raw.endsWith('/') ? (raw.slice(0, -1) || '/') : raw;
+const ov: { title?: string; description?: string } =
+  (overrides as any)[withSlash] ?? (overrides as any)[noSlash] ?? {};
+
+const pageTitle = (titleLocked && title) ? title : (ov.title || title);
+const pageDescription = ov.description || desc;
+---
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
+<link rel="canonical" href={canonical} />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style is:global>@import "../styles.css";</style>
+</head>
+<body>
+<header class="site"><div class="wrap hrow">
+  <a class="logo" href="/" aria-label="RateTerrain home">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M2 16c4-6 6-6 9-2s5 4 9-1M2 11c4-6 6-6 9-2s5 4 9-1M2 6c4-6 6-6 9-2s5 4 9-1" stroke="#35604a" stroke-width="1.8" stroke-linecap="round"/></svg>
+    Rate<b>Terrain</b></a>
+  <nav class="main" aria-label="Main">
+    <a href="/texas/health-insurance-cost/">Texas</a>
+    <a href="/texas/health-insurance-cost/methodology/">Methodology</a>
+    <a href="/about/">About</a>
+  </nav>
+</div></header>
+<slot />
+<footer class="site"><div class="wrap">
+  <div class="cols">
+    <div style="max-width:34em">
+      <strong>RateTerrain</strong> maps what things really cost, straight from public data.<br/>
+      Source: CMS Health Insurance Exchange Public Use Files, plan year 2026. RateTerrain is independent and is not affiliated with CMS, HealthCare.gov, or any insurance company. Premiums shown are before any premium tax credit. Informational only — not insurance, legal, or tax advice.
+    </div>
+    <div>
+      <a href="/about/">About</a><br/>
+      <a href="/texas/health-insurance-cost/methodology/">Methodology &amp; sources</a><br/>
+      <a href="/contact/">Contact</a><br/>
+      <a href="/privacy/">Privacy</a>
+    </div>
+  </div>
+</div></footer>
+</body>
+</html>

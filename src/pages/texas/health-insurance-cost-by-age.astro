@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import curve from '../../data/age_curve.json';
+const areas = Object.keys(curve.areas);
+const money = (v)=>`$${v.toFixed(2)}`;
+const first = curve.statewide[0], last = curve.statewide[curve.statewide.length-1];
+const mult = (last/first).toFixed(2);
+---
+<Layout title={`Texas Health Insurance Cost by Age, 21 to 64+ (${meta.plan_year}) — RateTerrain`} desc={`How marketplace premiums climb with age in Texas: median monthly cost at every age from 21 to 64+, statewide and for the five biggest metros. From CMS ${meta.plan_year} filings.`} path="/texas/health-insurance-cost-by-age/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Plan year {meta.plan_year} · The age curve</p>
+    <h1>Health insurance cost by age in Texas</h1>
+    <p class="lede">A Texan turning 64 pays about <b>{mult}×</b> what a 21-year-old pays for the very same plan — the median monthly premium climbs from <b>{money(first)}</b> to <b>{money(last)}</b> statewide. Here is the whole curve, from official rate filings.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <table>
+      <thead><tr><th>Age</th><th class="num">Texas (median)</th>{areas.map(a=><th class="num">{a}</th>)}</tr></thead>
+      <tbody>
+        {curve.ages.map((age,i)=>(<tr>
+          <td>{age}</td>
+          <td class="num">{money(curve.statewide[i])}</td>
+          {areas.map(a=><td class="num">{money(curve.areas[a][i])}</td>)}
+        </tr>))}
+      </tbody>
+    </table>
+    <p class="tablenote">Median monthly premium for one non-smoking adult across all marketplace medical plans priced in each area, before subsidies. RA = rating area, the geographic pricing zone Texas insurers must use.</p>
+  </section>
+
+  <section class="prose">
+    <h2>Why the curve looks like this</h2>
+    <p>The Affordable Care Act caps how steeply insurers can rate by age: an adult 64 or older may be charged at most three times the 21-year-old price. Texas carriers use the federal standard age curve, so the shape is identical across plans — flat through the twenties, a steady climb from the mid-thirties, and the steepest jumps after 50. What differs by county is the <em>starting point</em> of the curve, which is set by your rating area. Look up your county's numbers on the <a href="/texas/health-insurance-cost/">Texas cost page</a>.</p>
+    <h2>Three practical takeaways</h2>
+    <ul>
+      <li><b>Turning 26 and leaving a parent's plan?</b> You enter near the bottom of the curve — this is the cheapest coverage decade of adult life.</li>
+      <li><b>In your late fifties or early sixties?</b> The years before Medicare are the priciest to insure; the gap between areas matters most here, in dollar terms.</li>
+      <li><b>Comparing quotes?</b> If a price seems triple someone else's, check ages before assuming it's a different plan — it may be the same plan on a different point of the curve.</li>
+    </ul>
+  </section>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

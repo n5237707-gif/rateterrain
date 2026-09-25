@@ -1,0 +1,50 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import meta from '../../../data/meta.json';
+---
+<Layout title="Methodology & Sources — Texas Health Insurance Data — RateTerrain" desc="Where RateTerrain's Texas health insurance numbers come from: CMS public files, scope filters, formulas, update schedule, and known limitations." path="/texas/health-insurance-cost/methodology/">
+<main class="wrap prose">
+  <div class="hero" style="padding-bottom:8px">
+    <p class="eyebrow">Trust page · Updated {meta.built}</p>
+    <h1>Methodology &amp; sources</h1>
+    <p class="lede">Every figure on RateTerrain traces back to a public government file, a stated formula, and a date. This page documents all three.</p>
+  </div>
+
+  <h2>Primary source</h2>
+  <p>All Texas health insurance figures come from the <b>CMS Health Insurance Exchange Public Use Files</b> for plan year {meta.plan_year}: the Rate PUF (premiums insurers filed, by plan, age, tobacco status, and geographic rating area), the Plan Attributes PUF (metal level, plan type, names), and the Service Area PUF (which counties each plan is actually sold in). These files are published by the U.S. Centers for Medicare &amp; Medicaid Services as free public data. Our current build uses data imported by CMS on <b>{meta.import_latest}</b>.</p>
+
+  <h2>What we include</h2>
+  <ul>
+    <li>Individual-market medical plans only. Stand-alone dental and small-business (SHOP) plans are excluded.</li>
+    <li>Non-tobacco rates by default. Roughly nine in ten Texas rate rows carry a separate tobacco price; we show non-smoker prices unless labeled otherwise.</li>
+    <li>Statewide, that is <b>{meta.plans} plans</b> from <b>{meta.issuers} insurers</b> across <b>{meta.rating_areas} rating areas</b> and <b>{meta.counties} counties</b>.</li>
+  </ul>
+
+  <h2>The county rule</h2>
+  <p>A rating area sets a plan's <em>price</em>, but not its <em>availability</em>: insurers pick their counties. For any county figure, we first keep only plans whose filed service area includes that county, then compute statistics. This is why neighboring counties in the same rating area can show different plan counts and different lowest prices — both are real.</p>
+
+  <h2>Formulas</h2>
+  <ul>
+    <li><b>Lowest premium</b>: minimum filed monthly rate among plans sold in the county, at the stated age.</li>
+    <li><b>Median premium</b>: the middle value across those same plans. We prefer medians to averages because a few outlier plans shouldn't move the headline number.</li>
+    <li><b>Ranges over point estimates</b>: where space allows we show lowest-to-median, because a single number overstates precision.</li>
+  </ul>
+
+  <h2>Update schedule</h2>
+  <p>CMS refreshes the plan-year files periodically; we rebuild all pages from the newest file and print the import date next to the data. When the plan-year {meta.plan_year + 1} files are released ahead of Open Enrollment (typically late October), pages will switch to next-year prices and this page will note the change.</p>
+
+  <h2>Known limitations</h2>
+  <ul>
+    <li>Prices are <b>before</b> the premium tax credit. Your after-subsidy cost depends on household income and size; the enhanced pandemic-era credits ended December 31, 2025. HealthCare.gov shows your exact subsidized price.</li>
+    <li>Filed rates are not personal quotes; final enrollment prices can differ in edge cases.</li>
+    <li>We cover the ACA individual marketplace only — not employer plans, Medicaid, Medicare, or short-term products.</li>
+    <li>Aggregates (medians, minimums) are our derived calculations from CMS data, not figures CMS itself publishes.</li>
+  </ul>
+
+  <h2>Independence</h2>
+  <p>RateTerrain is not affiliated with CMS, HealthCare.gov, the Texas Department of Insurance, or any insurance company, and no insurer pays to alter the numbers. If we ever earn referral fees, that will be disclosed on the page where it happens — the data itself stays as filed.</p>
+
+  <h2>Corrections</h2>
+  <p>Spot an error? Write to <a href="/contact/">contact</a> — we verify against the source file and correct publicly.</p>
+</main>
+</Layout>

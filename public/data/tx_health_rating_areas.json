@@ -1,0 +1,480 @@
+{
+  "dataset": "tx_health_rating_areas",
+  "description": "Texas ACA individual/small-group geographic rating areas mapped to counties. Effective for plan years beginning on or after 2023-01-01.",
+  "source": "28 Tex. Admin. Code \u00a73.504 (current through Reg. 50, No. 26; June 27, 2025); cross-reference: CMS 'State Specific Geographic Rating Areas' (cms.gov/cciio/programs-and-initiatives/health-insurance-market-reforms/tx-gra)",
+  "verified": "2026-08-27",
+  "verification_notes": "27 rating areas; 254 county assignments = all Texas counties, each assigned exactly once (validated programmatically). Houston metro is split across areas 10, 26, 27. No residual non-MSA area since PY2023.",
+  "join_key_note": "Rate PUF field RatingAreaId is formatted like 'Rating Area 10'; join on integer part.",
+  "rating_areas": [
+    {
+      "rating_area_id": 1,
+      "puf_rating_area_label": "Rating Area 1",
+      "name": "Abilene",
+      "county_count": 18,
+      "counties": [
+        "Brown",
+        "Callahan",
+        "Coleman",
+        "Comanche",
+        "Eastland",
+        "Fisher",
+        "Haskell",
+        "Jones",
+        "Kent",
+        "Mitchell",
+        "Nolan",
+        "Runnels",
+        "Scurry",
+        "Shackelford",
+        "Stephens",
+        "Stonewall",
+        "Taylor",
+        "Throckmorton"
+      ]
+    },
+    {
+      "rating_area_id": 2,
+      "puf_rating_area_label": "Rating Area 2",
+      "name": "Amarillo",
+      "county_count": 26,
+      "counties": [
+        "Armstrong",
+        "Briscoe",
+        "Carson",
+        "Castro",
+        "Childress",
+        "Collingsworth",
+        "Dallam",
+        "Deaf Smith",
+        "Donley",
+        "Gray",
+        "Hall",
+        "Hansford",
+        "Hartley",
+        "Hemphill",
+        "Hutchinson",
+        "Lipscomb",
+        "Moore",
+        "Ochiltree",
+        "Oldham",
+        "Parmer",
+        "Potter",
+        "Randall",
+        "Roberts",
+        "Sherman",
+        "Swisher",
+        "Wheeler"
+      ]
+    },
+    {
+      "rating_area_id": 3,
+      "puf_rating_area_label": "Rating Area 3",
+      "name": "Austin",
+      "county_count": 10,
+      "counties": [
+        "Bastrop",
+        "Blanco",
+        "Burnet",
+        "Caldwell",
+        "Fayette",
+        "Hays",
+        "Lee",
+        "Llano",
+        "Travis",
+        "Williamson"
+      ]
+    },
+    {
+      "rating_area_id": 4,
+      "puf_rating_area_label": "Rating Area 4",
+      "name": "Beaumont",
+      "county_count": 15,
+      "counties": [
+        "Angelina",
+        "Hardin",
+        "Houston",
+        "Jasper",
+        "Jefferson",
+        "Nacogdoches",
+        "Newton",
+        "Orange",
+        "Polk",
+        "Sabine",
+        "San Augustine",
+        "San Jacinto",
+        "Shelby",
+        "Trinity",
+        "Tyler"
+      ]
+    },
+    {
+      "rating_area_id": 5,
+      "puf_rating_area_label": "Rating Area 5",
+      "name": "Brownsville",
+      "county_count": 3,
+      "counties": [
+        "Cameron",
+        "Kenedy",
+        "Willacy"
+      ]
+    },
+    {
+      "rating_area_id": 6,
+      "puf_rating_area_label": "Rating Area 6",
+      "name": "College Station",
+      "county_count": 8,
+      "counties": [
+        "Brazos",
+        "Burleson",
+        "Grimes",
+        "Leon",
+        "Madison",
+        "Milam",
+        "Robertson",
+        "Washington"
+      ]
+    },
+    {
+      "rating_area_id": 7,
+      "puf_rating_area_label": "Rating Area 7",
+      "name": "Corpus Christi",
+      "county_count": 8,
+      "counties": [
+        "Aransas",
+        "Bee",
+        "Jim Wells",
+        "Kleberg",
+        "Live Oak",
+        "Nueces",
+        "Refugio",
+        "San Patricio"
+      ]
+    },
+    {
+      "rating_area_id": 8,
+      "puf_rating_area_label": "Rating Area 8",
+      "name": "Dallas",
+      "county_count": 7,
+      "counties": [
+        "Collin",
+        "Dallas",
+        "Ellis",
+        "Hunt",
+        "Kaufman",
+        "Navarro",
+        "Rockwall"
+      ]
+    },
+    {
+      "rating_area_id": 9,
+      "puf_rating_area_label": "Rating Area 9",
+      "name": "El Paso",
+      "county_count": 6,
+      "counties": [
+        "Brewster",
+        "Culberson",
+        "El Paso",
+        "Hudspeth",
+        "Jeff Davis",
+        "Presidio"
+      ]
+    },
+    {
+      "rating_area_id": 10,
+      "puf_rating_area_label": "Rating Area 10",
+      "name": "Houston",
+      "county_count": 2,
+      "counties": [
+        "Galveston",
+        "Harris"
+      ]
+    },
+    {
+      "rating_area_id": 11,
+      "puf_rating_area_label": "Rating Area 11",
+      "name": "Killeen/Temple",
+      "county_count": 6,
+      "counties": [
+        "Bell",
+        "Coryell",
+        "Hamilton",
+        "Lampasas",
+        "Mills",
+        "San Saba"
+      ]
+    },
+    {
+      "rating_area_id": 12,
+      "puf_rating_area_label": "Rating Area 12",
+      "name": "Laredo",
+      "county_count": 5,
+      "counties": [
+        "Duval",
+        "Jim Hogg",
+        "McMullen",
+        "Webb",
+        "Zapata"
+      ]
+    },
+    {
+      "rating_area_id": 13,
+      "puf_rating_area_label": "Rating Area 13",
+      "name": "Longview",
+      "county_count": 6,
+      "counties": [
+        "Gregg",
+        "Harrison",
+        "Marion",
+        "Panola",
+        "Rusk",
+        "Upshur"
+      ]
+    },
+    {
+      "rating_area_id": 14,
+      "puf_rating_area_label": "Rating Area 14",
+      "name": "Lubbock",
+      "county_count": 15,
+      "counties": [
+        "Bailey",
+        "Cochran",
+        "Crosby",
+        "Dickens",
+        "Floyd",
+        "Garza",
+        "Hale",
+        "Hockley",
+        "King",
+        "Lamb",
+        "Lubbock",
+        "Lynn",
+        "Motley",
+        "Terry",
+        "Yoakum"
+      ]
+    },
+    {
+      "rating_area_id": 15,
+      "puf_rating_area_label": "Rating Area 15",
+      "name": "McAllen",
+      "county_count": 3,
+      "counties": [
+        "Brooks",
+        "Hidalgo",
+        "Starr"
+      ]
+    },
+    {
+      "rating_area_id": 16,
+      "puf_rating_area_label": "Rating Area 16",
+      "name": "Midland/Odessa",
+      "county_count": 17,
+      "counties": [
+        "Andrews",
+        "Borden",
+        "Crane",
+        "Dawson",
+        "Ector",
+        "Gaines",
+        "Glasscock",
+        "Howard",
+        "Loving",
+        "Martin",
+        "Midland",
+        "Pecos",
+        "Reeves",
+        "Terrell",
+        "Upton",
+        "Ward",
+        "Winkler"
+      ]
+    },
+    {
+      "rating_area_id": 17,
+      "puf_rating_area_label": "Rating Area 17",
+      "name": "San Angelo",
+      "county_count": 13,
+      "counties": [
+        "Coke",
+        "Concho",
+        "Crockett",
+        "Irion",
+        "Kimble",
+        "Mason",
+        "McCulloch",
+        "Menard",
+        "Reagan",
+        "Schleicher",
+        "Sterling",
+        "Sutton",
+        "Tom Green"
+      ]
+    },
+    {
+      "rating_area_id": 18,
+      "puf_rating_area_label": "Rating Area 18",
+      "name": "San Antonio",
+      "county_count": 21,
+      "counties": [
+        "Atascosa",
+        "Bandera",
+        "Bexar",
+        "Comal",
+        "Dimmit",
+        "Edwards",
+        "Frio",
+        "Gillespie",
+        "Gonzales",
+        "Guadalupe",
+        "Kendall",
+        "Kerr",
+        "Kinney",
+        "La Salle",
+        "Maverick",
+        "Medina",
+        "Real",
+        "Uvalde",
+        "Val Verde",
+        "Wilson",
+        "Zavala"
+      ]
+    },
+    {
+      "rating_area_id": 19,
+      "puf_rating_area_label": "Rating Area 19",
+      "name": "Sherman/Dennison",
+      "county_count": 3,
+      "counties": [
+        "Cooke",
+        "Fannin",
+        "Grayson"
+      ]
+    },
+    {
+      "rating_area_id": 20,
+      "puf_rating_area_label": "Rating Area 20",
+      "name": "Texarkana",
+      "county_count": 10,
+      "counties": [
+        "Bowie",
+        "Camp",
+        "Cass",
+        "Delta",
+        "Franklin",
+        "Hopkins",
+        "Lamar",
+        "Morris",
+        "Red River",
+        "Titus"
+      ]
+    },
+    {
+      "rating_area_id": 21,
+      "puf_rating_area_label": "Rating Area 21",
+      "name": "Tyler",
+      "county_count": 7,
+      "counties": [
+        "Anderson",
+        "Cherokee",
+        "Henderson",
+        "Rains",
+        "Smith",
+        "Van Zandt",
+        "Wood"
+      ]
+    },
+    {
+      "rating_area_id": 22,
+      "puf_rating_area_label": "Rating Area 22",
+      "name": "Victoria",
+      "county_count": 7,
+      "counties": [
+        "Calhoun",
+        "DeWitt",
+        "Goliad",
+        "Jackson",
+        "Karnes",
+        "Lavaca",
+        "Victoria"
+      ]
+    },
+    {
+      "rating_area_id": 23,
+      "puf_rating_area_label": "Rating Area 23",
+      "name": "Waco",
+      "county_count": 6,
+      "counties": [
+        "Bosque",
+        "Falls",
+        "Freestone",
+        "Hill",
+        "Limestone",
+        "McLennan"
+      ]
+    },
+    {
+      "rating_area_id": 24,
+      "puf_rating_area_label": "Rating Area 24",
+      "name": "Wichita Falls",
+      "county_count": 12,
+      "counties": [
+        "Archer",
+        "Baylor",
+        "Clay",
+        "Cottle",
+        "Foard",
+        "Hardeman",
+        "Jack",
+        "Knox",
+        "Montague",
+        "Wichita",
+        "Wilbarger",
+        "Young"
+      ]
+    },
+    {
+      "rating_area_id": 25,
+      "puf_rating_area_label": "Rating Area 25",
+      "name": "Fort Worth",
+      "county_count": 9,
+      "counties": [
+        "Denton",
+        "Erath",
+        "Hood",
+        "Johnson",
+        "Palo Pinto",
+        "Parker",
+        "Somervell",
+        "Tarrant",
+        "Wise"
+      ]
+    },
+    {
+      "rating_area_id": 26,
+      "puf_rating_area_label": "Rating Area 26",
+      "name": "Houston SW",
+      "county_count": 7,
+      "counties": [
+        "Austin",
+        "Brazoria",
+        "Colorado",
+        "Fort Bend",
+        "Matagorda",
+        "Waller",
+        "Wharton"
+      ]
+    },
+    {
+      "rating_area_id": 27,
+      "puf_rating_area_label": "Rating Area 27",
+      "name": "Houston NE",
+      "county_count": 4,
+      "counties": [
+        "Chambers",
+        "Liberty",
+        "Montgomery",
+        "Walker"
+      ]
+    }
+  ]
+}

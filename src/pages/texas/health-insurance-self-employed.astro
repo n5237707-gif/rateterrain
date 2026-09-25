@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import curve from '../../data/age_curve.json';
+import g from '../../data/guides.json';
+const money=(v)=>`$${v.toFixed(2)}`;
+const ix = (a)=>curve.ages.indexOf(a);
+const med30 = curve.statewide[ix('30')], med40 = curve.statewide[ix('40')], med50 = curve.statewide[ix('50')];
+const min40 = Math.min(...Object.values(g.metals).map(m=>m.prem40_min));
+const metros = Object.keys(curve.areas);
+---
+<Layout title={`Self-Employed Health Insurance in Texas: Cost & the Tax Deduction (${meta.plan_year}) — RateTerrain`} desc={`Freelancer or 1099 in Texas? Real ${meta.plan_year} marketplace premiums (median ${money(med40)} at 40), plus how the self-employed health insurance deduction works — from IRS Form 7206 instructions.`} path="/texas/health-insurance-self-employed/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Self-employed &amp; 1099 · Plan year {meta.plan_year}</p>
+    <h1>Health insurance when you're your own employer</h1>
+    <p class="lede">No HR department, no employer paying most of the bill — the marketplace is where Texas freelancers, contractors, and business owners buy coverage. Full prices start around <b>{money(min40)}</b> a month at 40 (median <b>{money(med40)}</b>) — but self-employment comes with a tax break most W-2 workers never get.</p>
+    <p class="prov">Sources: CMS Exchange Public Use Files (imported <b>{meta.import_latest}</b>) · IRS Instructions for Form 7206 (reviewed Apr 30, 2026) · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <h2>What coverage costs across working ages</h2>
+    <table>
+      <thead><tr><th>Metro</th><th class="num">Median at 30</th><th class="num">Median at 40</th><th class="num">Median at 50</th></tr></thead>
+      <tbody>
+        {metros.map(mname => <tr><td>{mname}</td><td class="num">{money(curve.areas[mname][ix('30')])}</td><td class="num">{money(curve.areas[mname][ix('40')])}</td><td class="num">{money(curve.areas[mname][ix('50')])}</td></tr>)}
+        <tr><td><b>Texas statewide</b></td><td class="num"><b>{money(med30)}</b></td><td class="num"><b>{money(med40)}</b></td><td class="num"><b>{money(med50)}</b></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote">One non-smoking adult, all metal levels, before subsidies. Your county: <a href="/texas/health-insurance-cost/">lookup tool</a> · choosing a tier: <a href="/texas/bronze-vs-silver/">Bronze vs Silver vs Gold</a>.</p>
+  </section>
+
+  <section class="prose">
+    <h2>The deduction: premiums come off your taxable income</h2>
+    <p>Per current IRS rules (Form 7206 and its instructions), self-employed people with a net profit can generally deduct what they paid for health coverage — medical, dental, vision, and qualified long-term care — for themselves, a spouse, dependents, and even a child under 27 who isn't a dependent. It's an "above-the-line" deduction on Schedule 1 (Form 1040), line 17: you get it whether or not you itemize.</p>
+    <p>Three rules decide whether a month counts:</p>
+    <ul>
+      <li><b>No employer plan on the table.</b> Any month you were <em>eligible</em> for an employer-subsidized plan — including through a spouse's job — is excluded, even if you never enrolled.</li>
+      <li><b>Profit is the ceiling.</b> The deduction can't exceed the net earnings of the business the plan is tied to. A thin year shrinks the deduction.</li>
+      <li><b>Marketplace + subsidy = special math.</b> If you bought the plan on HealthCare.gov and take the premium tax credit, the deduction and the credit interact (IRS Pub. 974 has the calculation — worth handing to your tax preparer rather than eyeballing).</li>
+    </ul>
+    <h2>The income-estimate trap for variable earners</h2>
+    <p>Your subsidy keys off the income you <em>project</em> for the year — a number freelancers famously can't project. Underestimate and you may owe subsidy money back at filing; overestimate and you overpay all year and reconcile at tax time. The practical habit: update your income estimate on HealthCare.gov when a big contract lands or ends, not once a year.</p>
+  </section>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Tax rules summarized here are general information, not tax advice — confirm your situation with a tax professional. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

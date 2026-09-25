@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import g from '../../data/guides.json';
+const r = g.ret; const money=(v)=>`$${v.toFixed(2)}`;
+const gapMo = r.gap62.max - r.gap62.min;
+const metros = Object.entries(r.metros64);
+---
+<Layout title={`Retiring Before 65 in Texas: Health Insurance Cost 60–64 (${meta.plan_year}) — RateTerrain`} desc={`Bridging the years before Medicare in Texas: real ${meta.plan_year} premiums at 60, 62 and 64+, by metro. Median at 64+ is ${money(r.ages['64 and over'][0])}/mo — and where you live changes it by hundreds.`} path="/texas/health-insurance-early-retirement/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · The Medicare bridge · Plan year {meta.plan_year}</p>
+    <h1>Retiring before 65: insuring the gap years in Texas</h1>
+    <p class="lede">The years between leaving work and Medicare at 65 are the most expensive of your life to insure — federal rules let insurers charge this age band up to three times the young-adult price, and they do. At 64, the median Texas marketplace plan runs <b>{money(r.ages['64 and over'][0])}</b> a month; plans start at <b>{money(r.ages['64 and over'][1])}</b>.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <h2>The last climb of the age curve</h2>
+    <table>
+      <thead><tr><th>Age</th><th class="num">Lowest / month</th><th class="num">Median / month</th></tr></thead>
+      <tbody>
+        {Object.entries(r.ages).map(([a,v]) => <tr><td>{a.replace(' and over','+')}</td><td class="num">{money(v[1])}</td><td class="num">{money(v[0])}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">One non-smoking adult, all metal levels, before subsidies. Full curve from 21: <a href="/texas/health-insurance-cost-by-age/">cost by age</a>.</p>
+  </section>
+
+  <section class="prose">
+    <h2>Where you live matters most at this age</h2>
+    <p>Because premiums scale with the local base rate, the gap between Texas regions peaks in dollar terms right here. At age 62, the median plan costs <b>{money(r.gap62.min)}</b> a month in the cheapest rating area (RA{r.gap62.min_ra}, the Beaumont region) versus <b>{money(r.gap62.max)}</b> in the priciest (RA{r.gap62.max_ra}, the San Angelo region) — a difference of about <b>{money(gapMo)}</b> every month, or roughly <b>${Math.round(gapMo*12).toLocaleString('en-US')}</b> a year for the same coverage tier.</p>
+    <table>
+      <thead><tr><th>Metro</th><th class="num">Lowest at 64+</th><th class="num">Median at 64+</th></tr></thead>
+      <tbody>
+        {metros.map(([name,v]) => <tr><td>{name}</td><td class="num">{money(v[1])}</td><td class="num">{money(v[0])}</td></tr>)}
+      </tbody>
+    </table>
+    <h2>Three levers early retirees actually have</h2>
+    <ul>
+      <li><b>Income timing is subsidy timing.</b> The premium tax credit keys off your reported income — the year you stop working, a carefully planned withdrawal strategy can mean qualifying for real help with these premiums. This intersects with tax planning; a fee-only advisor earns their fee here.</li>
+      <li><b>Metal level is a risk decision, not a budget line.</b> At these premiums the Bronze-vs-Gold spread is large in dollars — but so are deductibles when health events arrive. Our <a href="/texas/bronze-vs-silver/">metal-level comparison</a> shows both sides.</li>
+      <li><b>Count the months precisely.</b> Coverage needs to reach the month Medicare starts, not "age 65-ish." A plan year that ends mid-stream can be kept — you won't be locked in once Medicare begins.</li>
+    </ul>
+  </section>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

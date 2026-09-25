@@ -1,0 +1,67 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import meta from '../../../data/meta.json';
+import detail from '../../../data/county_detail.json';
+export function getStaticPaths(){
+  return Object.keys(detail).map(slug => ({ params: { slug } }));
+}
+const { slug } = Astro.params;
+const d = detail[slug];
+const money = (v)=>`$${v.toFixed(2)}`;
+const others = Object.values(detail).filter(x=>x.slug!==slug);
+const ageRows = Object.entries(d.ages);
+const issuersLine = d.issuer_list.map(i=>`${i.name} (${i.plans} plans)`).join(' \u00b7 ');
+const vsState = d.ages['40'].med - d.state_med40;
+const vsTxt = Math.abs(vsState) < 5 ? 'right at the Texas median' : (vsState>0 ? `about $${Math.abs(vsState).toFixed(0)} above the Texas median` : `about $${Math.abs(vsState).toFixed(0)} below the Texas median`);
+---
+<Layout title={`${d.county} County Health Insurance Cost (${meta.plan_year}): ${d.plans} Plans Compared — RateTerrain`} desc={`Real ${meta.plan_year} marketplace premiums in ${d.county} County, TX: ${d.plans} plans from ${d.issuers} insurers, from ${money(d.ages['40'].min)}/mo at age 40. By age and metal level, from CMS filings.`} path={`/texas/health-insurance-cost/${slug}/`}>
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Rating Area {d.ra} · Plan year {meta.plan_year}</p>
+    <h1>Health insurance cost in {d.county} County</h1>
+    <p class="lede">Insurers filed <b>{d.plans} individual marketplace plans</b> that are actually sold in {d.county} County — from <b>{d.issuers} companies</b>. For a 40-year-old non-smoker, prices start at <b>{money(d.ages['40'].min)}</b> a month, with a typical (median) plan at <b>{money(d.ages['40'].med)}</b> — {vsTxt}.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+
+  <section>
+    <h2>Premiums by age in {d.county} County</h2>
+    <table>
+      <thead><tr><th>Age</th><th class="num">Lowest / month</th><th class="num">Median / month</th></tr></thead>
+      <tbody>
+        {ageRows.map((e) => <tr><td>{e[0]}</td><td class="num">{money(e[1].min)}</td><td class="num">{money(e[1].med)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">One non-smoking adult, all metal levels combined. Federal rules cap the 64-year-old price at three times the 21-year-old price — see the full <a href="/texas/health-insurance-cost-by-age/">Texas age curve</a>.</p>
+  </section>
+
+  <section>
+    <h2>By metal level (age 40)</h2>
+    <table>
+      <thead><tr><th>Metal level</th><th class="num">Plans</th><th class="num">Lowest</th><th class="num">Median</th></tr></thead>
+      <tbody>
+        {d.metals.map(m => <tr><td>{m.metal}</td><td class="num">{m.count}</td><td class="num">{money(m.min40)}</td><td class="num">{money(m.med40)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">Higher metal = higher premium but lower costs when you use care. If your income qualifies for cost-sharing reductions, they apply only on Silver plans — a Silver plan can then beat Bronze on total cost.</p>
+  </section>
+
+  <section>
+    <h2>Cheapest plans at age 40</h2>
+    <table>
+      <thead><tr><th>Insurer</th><th>Plan</th><th>Metal</th><th class="num">Monthly</th></tr></thead>
+      <tbody>
+        {d.cheapest.map(p => <tr><td>{p.issuer}</td><td>{p.plan}</td><td>{p.metal} · {p.type}</td><td class="num">{money(p.rate)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">Lowest premium is not always lowest total cost — check deductibles and networks before choosing. Catastrophic plans have enrollment restrictions above age 30.</p>
+  </section>
+
+  <section>
+    <h2>Who sells here</h2>
+    <p>{issuersLine}</p>
+    <p>No insurer covers all of Texas, so this line-up is specific to {d.county} County. Compare nearby markets: {others.map((o,idx)=><span><a href={`/texas/health-insurance-cost/${o.slug}/`}>{o.county} County</a>{idx !== others.length-1 ? ' \u00b7 ' : ''}</span>)} — or the <a href="/texas/health-insurance-cost/">statewide view</a>.</p>
+  </section>
+</main>
+</Layout>

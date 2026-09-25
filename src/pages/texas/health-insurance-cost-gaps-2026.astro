@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import counties from '../../data/counties.json';
+import g from '../../data/guides.json';
+const money=(v)=>`$${v.toFixed(2)}`;
+const withData = counties.filter(c=>c.min40 && c.med40);
+const byMin = [...withData].sort((a,b)=>a.min40-b.min40);
+const byMed = [...withData].sort((a,b)=>a.med40-b.med40);
+const byPlans = [...counties].sort((a,b)=>a.plans-b.plans);
+const oneIns = counties.filter(c=>c.issuers===1).map(c=>c.county);
+const leTwo = counties.filter(c=>c.issuers<=2).length;
+const cheap5 = byMin.slice(0,5), dear5 = byMin.slice(-5).reverse();
+const entryGapPct = Math.round(100*(byMin[byMin.length-1].min40/byMin[0].min40 - 1));
+const gap62 = g.ret.gap62; const gap62mo = gap62.max-gap62.min;
+---
+<Layout title={`The Texas Health Insurance Terrain: Six Gaps the ${meta.plan_year} Filings Reveal — RateTerrain`} desc={`Original analysis of all ${meta.counties} Texas counties from CMS ${meta.plan_year} filings: an ${entryGapPct}% county gap in the cheapest available plan, ${oneIns.length} single-insurer counties, a 7× spread in plan choice, and why Gold undercuts Silver.`} path="/texas/health-insurance-cost-gaps-2026/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Data study · All {meta.counties} counties · Plan year {meta.plan_year}</p>
+    <h1>The Texas health insurance terrain: six gaps in the {meta.plan_year} map</h1>
+    <p class="lede">We processed every rate insurers filed with the federal marketplace for Texas — {meta.plans} plans, {meta.issuers} companies, all {meta.counties} counties — and mapped where the ground shifts under buyers' feet. Journalists and researchers: every figure below is reproducible from public CMS files, and we're glad to share county-level cuts — <a href="/contact/">contact us</a>.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">full methodology</a></p>
+  </div>
+
+  <section class="prose">
+    <h2>1. The cheapest plan costs {entryGapPct}% more depending on your county</h2>
+    <p>The lowest-priced plan available to a 40-year-old starts at <b>{money(byMin[0].min40)}</b> a month in {byMin[0].county} County — and at <b>{money(byMin[byMin.length-1].min40)}</b> in {byMin[byMin.length-1].county} County. Same state, same federal marketplace, same age: an {entryGapPct}% difference in the price of simply getting covered.</p>
+    <table>
+      <thead><tr><th>Cheapest entry price</th><th class="num">Lowest plan, 40</th><th>Priciest entry price</th><th class="num">Lowest plan, 40</th></tr></thead>
+      <tbody>
+        {cheap5.map((c,i)=><tr><td>{c.county}</td><td class="num">{money(c.min40)}</td><td>{dear5[i].county}</td><td class="num">{money(dear5[i].min40)}</td></tr>)}
+      </tbody>
+    </table>
+
+    <h2>2. Seven Texas counties have exactly one insurer</h2>
+    <p>In {oneIns.join(', ')} counties — all in the Wichita Falls region — marketplace shoppers have a choice of carriers that isn't a choice at all: one company sells there. Zoom out and <b>{leTwo} of {meta.counties} counties ({Math.round(100*leTwo/meta.counties)}%)</b> have two insurers or fewer, while Dallas County shoppers pick among ten.</p>
+
+    <h2>3. Plan choice varies seven-fold</h2>
+    <p>{byPlans[byPlans.length-1].county} County residents choose from <b>{byPlans[byPlans.length-1].plans} plans</b>; in {byPlans[0].county} County the menu is <b>{byPlans[0].plans}</b>. No insurer covers the whole state — every county's line-up is its own.</p>
+
+    <h2>4. For a 62-year-old, geography is worth {money(gap62mo)} a month</h2>
+    <p>The median plan for a 62-year-old costs {money(gap62.min)} in the Beaumont rating region and {money(gap62.max)} around San Angelo — <b>about ${Math.round(gap62mo*12).toLocaleString('en-US')} a year</b> for the same coverage tier, at the age when premiums peak. Details: <a href="/texas/health-insurance-early-retirement/">the pre-Medicare years</a>.</p>
+
+    <h2>5. Gold is cheaper than Silver — yes, really</h2>
+    <p>Statewide, the median Silver plan costs <b>{money(Math.abs(g.metals['Silver'].prem40_med - g.metals['Gold'].prem40_med))} more</b> per month than the median Gold plan, because insurers price mandated low-income discounts into Silver. Shoppers who don't qualify for those discounts and never compare tiers overpay for less coverage. Full breakdown: <a href="/texas/bronze-vs-silver/">Bronze vs Silver vs Gold</a>.</p>
+
+    <h2>6. Age still triples the bill — exactly</h2>
+    <p>Every Texas filing uses the maximum age spread federal law allows: a 64-year-old pays precisely 3.0× the 21-year-old price, plan for plan. The whole curve: <a href="/texas/health-insurance-cost-by-age/">cost by age</a>.</p>
+
+    <h2>The map</h2>
+    <p><a href="/texas/health-insurance-data/"><img src="/assets/tx-cheapest-plan-map-2026.svg" alt="Map: lowest available marketplace premium for a 40-year-old by Texas county" style="max-width:100%;height:auto;border:1px solid var(--contour)" loading="lazy" /></a></p>
+    <p class="tablenote">Embeddable SVG/PNG and the full county CSV: <a href="/texas/health-insurance-data/">data &amp; press page</a>.</p>
+
+    <h2>Reuse this data</h2>
+    <p>Cite as "RateTerrain analysis of CMS {meta.plan_year} Exchange Public Use Files" with a link. County-level figures for any of the {meta.counties} counties are in our <a href="/texas/health-insurance-cost/">lookup tool</a>; custom cuts on request.</p>
+  </section>
+
+  <div class="disclaim">Premiums are <b>before</b> any premium tax credit; most subsidized enrollees pay less, though the enhanced pandemic-era subsidies ended December 31, 2025.</div>
+</main>
+</Layout>

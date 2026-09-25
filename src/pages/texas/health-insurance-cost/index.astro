@@ -1,0 +1,98 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import meta from '../../../data/meta.json';
+import counties from '../../../data/counties.json';
+import detail from '../../../data/county_detail.json';
+const slugOf = Object.fromEntries(Object.values(detail).map(d=>[d.county,d.slug]));
+const top = [...counties].sort((a,b)=>b.plans-a.plans).slice(0,15);
+const fmt = (v) => v==null ? '—' : `$${v.toFixed(2)}`;
+---
+<Layout title={`Texas Health Insurance Cost by County & Age (${meta.plan_year}) — RateTerrain`} desc={`Real ${meta.plan_year} marketplace premiums for Texas from CMS data: ${meta.plans} plans across ${meta.counties} counties. Look up your county and age.`} path="/texas/health-insurance-cost/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:24px">
+    <p class="eyebrow">Texas · Plan year {meta.plan_year} · Individual marketplace</p>
+    <h1>What health insurance actually costs in Texas</h1>
+    <p class="lede">Every number below comes from rates insurers filed with the federal marketplace — not estimates, not quotes from lead forms. Median monthly premium for a 40-year-old ranges from <b>${meta.min_med40}</b> to <b>${meta.max_med40}</b> depending on where in Texas you live: a {meta.spread_pct}% spread.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · data imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">how we compute this</a></p>
+  </div>
+
+  <div class="tool">
+    <h2>Look up your county</h2>
+    <p class="tablenote">Premiums are full monthly prices for one non-smoking adult, before any subsidy. Only plans actually sold in your county are counted.</p>
+    <div class="controls">
+      <label>County
+        <select id="county">{counties.map(c => <option value={c.fips}>{c.county}</option>)}</select>
+      </label>
+      <label>Age
+        <select id="age">
+          <option value="21">21</option><option value="30">30</option>
+          <option value="40" selected>40</option><option value="50">50</option><option value="60">60</option>
+        </select>
+      </label>
+    </div>
+    <div class="readout">
+      <div class="cell"><div class="v" id="r-min">—</div><div class="k">Lowest premium / month</div></div>
+      <div class="cell"><div class="v" id="r-med">—</div><div class="k">Median premium / month</div></div>
+      <div class="cell"><div class="v" id="r-plans">—</div><div class="k">Plans sold in county</div></div>
+      <div class="cell"><div class="v" id="r-iss">—</div><div class="k">Insurers</div></div>
+    </div>
+    <div class="elevbar" aria-hidden="true"><div class="tick" id="tick" style="left:38%"></div></div>
+    <div class="elevlabels"><span>cheapest TX area</span><span>priciest TX area</span></div>
+    <script type="application/json" id="cdata" set:html={JSON.stringify(counties)}></script>
+    <script type="application/json" id="mdata" set:html={JSON.stringify(meta)}></script>
+    <script>
+      const C = JSON.parse(document.getElementById('cdata').textContent);
+      const M = JSON.parse(document.getElementById('mdata').textContent);
+      const $ = id => document.getElementById(id);
+      const money = v => v==null ? '—' : '$'+v.toFixed(2);
+      function render(){
+        const c = C.find(x=>x.fips===$('county').value); const a=$('age').value;
+        $('r-min').textContent = money(c['min'+a]);
+        $('r-med').textContent = money(c['med'+a]);
+        $('r-plans').textContent = c.plans; $('r-iss').textContent = c.issuers;
+        if(a==='40' && c.med40){
+          const p = Math.min(1,Math.max(0,(c.med40-M.min_med40)/(M.max_med40-M.min_med40)));
+          $('tick').style.left = (p*100).toFixed(1)+'%';
+        }
+      }
+      $('county').value='48201'; // Harris default
+      $('county').addEventListener('change',render); $('age').addEventListener('change',render); render();
+    </script>
+  </div>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+
+  <section>
+    <h2>Where premiums stand across Texas</h2>
+    <p class="tablenote">New: our data study — <a href="/texas/health-insurance-cost-gaps-2026/">six gaps in the Texas insurance terrain</a>, from single-insurer counties to the Gold-under-Silver anomaly.</p>
+    <div class="band">
+      <div><div class="n">{meta.plans}</div><div class="l">marketplace medical plans statewide</div></div>
+      <div><div class="n">{meta.issuers}</div><div class="l">insurance companies</div></div>
+      <div><div class="n">{meta.spread_pct}%</div><div class="l">gap between cheapest and priciest rating area (age 40 median)</div></div>
+      <div><div class="n">0</div><div class="l">insurers that sell in every county — local availability really differs</div></div>
+    </div>
+    <p>Texas prices health coverage across 27 geographic rating areas, and insurers choose which counties to enter. That is why two neighboring counties can see different plan line-ups and different price floors. The table shows the fifteen counties with the widest choice of plans.</p>
+    <table>
+      <thead><tr><th>County</th><th class="num">Plans</th><th class="num">Insurers</th><th class="num">Lowest, age 40</th><th class="num">Median, age 40</th><th class="num">Median Silver, 40</th></tr></thead>
+      <tbody>
+        {top.map(c => <tr><td>{slugOf[c.county] ? <a href={`/texas/health-insurance-cost/${slugOf[c.county]}/`}>{c.county}</a> : c.county}</td><td class="num">{c.plans}</td><td class="num">{c.issuers}</td><td class="num">{fmt(c.min40)}</td><td class="num">{fmt(c.med40)}</td><td class="num">{fmt(c.medSilver40)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">All 254 counties are covered by the lookup tool above. Full county pages so far: Harris, Dallas, Tarrant, Bexar, and Travis — linked in the table.</p>
+  </section>
+
+  <section>
+    <h2>Age changes the picture — up to three-fold</h2>
+    <p>Federal rules let Texas insurers charge a 64-year-old up to three times what a 21-year-old pays for the same plan, and our data shows carriers use every bit of that room. See the full curve, statewide and for the five biggest metros, on the <a href="/texas/health-insurance-cost-by-age/">cost-by-age page</a>.</p>
+  </section>
+
+  <section>
+    <h2>Guides for the moments that change your price</h2>
+    <p><a href="/texas/health-insurance-turning-26/">Turning 26 and leaving a parent's plan</a> — deadlines and first-plan prices · <a href="/texas/health-insurance-early-retirement/">Retiring before 65</a> — the Medicare bridge years · <a href="/texas/bronze-vs-silver/">Bronze vs Silver vs Gold</a> — premiums against deductibles, including why Gold often beats Silver here · <a href="/texas/health-insurance-self-employed/">Self-employed &amp; 1099</a> — prices plus the tax deduction · <a href="/texas/cobra-vs-marketplace/">COBRA vs marketplace</a> — the after-layoff math.</p>
+  </section>
+
+  <section>
+    <div class="note"><b>What this data is — and isn't.</b> These are filed list prices from the federal marketplace's public files: the same rates you would see before subsidies at HealthCare.gov. They are not personal quotes, and they don't reflect employer coverage, Medicaid, or Medicare. Details: <a href="/texas/health-insurance-cost/methodology/">methodology &amp; sources</a>.</div>
+  </section>
+</main>
+</Layout>

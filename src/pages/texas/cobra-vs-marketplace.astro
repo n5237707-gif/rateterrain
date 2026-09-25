@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import curve from '../../data/age_curve.json';
+const money=(v)=>`$${v.toFixed(2)}`;
+const ix=(a)=>curve.ages.indexOf(a);
+// KFF Employer Health Benefits Survey 2025 (kff.org, Oct 2025): avg annual premium $9,325 single / $26,993 family; avg worker share 16% single.
+const KFF_SINGLE_Y = 9325, KFF_FAMILY_Y = 26993, KFF_WORKER_SINGLE_Y = 1440;
+const cobraS = KFF_SINGLE_Y/12*1.02, cobraF = KFF_FAMILY_Y/12*1.02, hadPaid = KFF_WORKER_SINGLE_Y/12;
+const ages = ['30','40','50','60'];
+---
+<Layout title={`COBRA vs Marketplace in Texas: What Losing a Job Really Costs (${meta.plan_year}) — RateTerrain`} desc={`After a layoff, COBRA runs about ${money(cobraS)}/mo for single coverage (full employer-plan price + 2%), while Texas marketplace medians range ${money(curve.statewide[ix('30')])}–${money(curve.statewide[ix('60')])} by age. The real comparison, with deadlines.`} path="/texas/cobra-vs-marketplace/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Losing job coverage · Plan year {meta.plan_year}</p>
+    <h1>COBRA or the marketplace: the after-layoff math</h1>
+    <p class="lede">Keeping your old plan through COBRA means paying its <b>entire</b> premium yourself — the share your employer quietly covered, plus up to a 2% fee. For the average single plan that's about <b>{money(cobraS)}</b> a month, versus the roughly <b>{money(hadPaid)}</b> the average worker had been paying from their paycheck. Marketplace plans price by age instead, so which route wins depends mostly on how old you are and whether a subsidy kicks in.</p>
+    <p class="prov">Sources: KFF Employer Health Benefits Survey 2025 (employer-plan averages) · CMS Exchange Public Use Files, imported <b>{meta.import_latest}</b> (marketplace) · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <h2>The two price tags, side by side</h2>
+    <table>
+      <thead><tr><th>Route</th><th class="num">~Monthly, one adult</th><th>How it's priced</th></tr></thead>
+      <tbody>
+        <tr><td>COBRA — average single plan</td><td class="num">{money(cobraS)}</td><td>Full employer-plan premium + up to 2% admin fee; same price at 25 or 60</td></tr>
+        <tr><td>COBRA — average family plan</td><td class="num">{money(cobraF)}</td><td>Same rule, family tier</td></tr>
+        <tr><td>Texas marketplace — median at 30</td><td class="num">{money(curve.statewide[ix('30')])}</td><td rowspan="4">Priced by age and county, before any subsidy; job loss usually unlocks subsidy eligibility mid-year</td></tr>
+        <tr><td>… median at 40</td><td class="num">{money(curve.statewide[ix('40')])}</td></tr>
+        <tr><td>… median at 50</td><td class="num">{money(curve.statewide[ix('50')])}</td></tr>
+        <tr><td>… median at 60</td><td class="num">{money(curve.statewide[ix('60')])}</td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote">COBRA figures derive from the KFF 2025 employer survey national averages; your actual COBRA price is your specific plan's full premium — the exact number must be in your election notice. Marketplace medians: our CMS data; county detail in the <a href="/texas/health-insurance-cost/">lookup tool</a>.</p>
+  </section>
+
+  <section class="prose">
+    <h2>How to actually decide</h2>
+    <ul>
+      <li><b>Younger and healthy</b> → marketplace usually wins on price alone: at 30, the median Texas plan costs roughly half an average COBRA single premium — before any subsidy.</li>
+      <li><b>Mid-treatment, mid-deductible, or attached to your doctors</b> → COBRA's superpower is continuity: same network, same deductible progress, no restart. Sometimes worth paying for.</li>
+      <li><b>Near 60</b> → the gap narrows or flips ({money(curve.statewide[ix('60')])} median vs {money(cobraS)} COBRA), and the network question dominates. Compare your actual plans, not averages — see the <a href="/texas/health-insurance-early-retirement/">pre-Medicare guide</a>.</li>
+      <li><b>Lower income year ahead?</b> A layoff year often qualifies for marketplace subsidies COBRA never gets. That single factor decides many cases.</li>
+    </ul>
+    <h2>Deadlines that don't forgive</h2>
+    <ul>
+      <li><b>COBRA election: 60 days</b> from your election notice — and it's retroactive to the day coverage ended, which effectively lets you stay uninsured-but-protected while deciding.</li>
+      <li><b>Marketplace Special Enrollment: 60 days</b> from losing job coverage. Miss both windows and you're waiting for Open Enrollment in the fall.</li>
+      <li><b>COBRA lasts up to 18 months</b> in the typical case — it's a bridge, not a destination.</li>
+    </ul>
+  </section>
+
+  <div class="disclaim">Marketplace prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

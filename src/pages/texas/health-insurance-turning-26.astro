@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+import g from '../../data/guides.json';
+const t = g.t26; const money=(v)=>`$${v.toFixed(2)}`;
+const metros = Object.entries(t.metros);
+---
+<Layout title={`Turning 26 in Texas: Health Insurance Cost & Deadlines (${meta.plan_year}) — RateTerrain`} desc={`Aging off a parent's plan at 26 in Texas: real ${meta.plan_year} premiums start at ${money(t.statewide[1])}/mo, median ${money(t.statewide[0])}. Deadlines, options, and prices by metro.`} path="/texas/health-insurance-turning-26/">
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Texas · Life event · Plan year {meta.plan_year}</p>
+    <h1>Turning 26: your first own health plan in Texas</h1>
+    <p class="lede">When you age off a parent's plan, marketplace coverage in Texas starts at <b>{money(t.statewide[1])}</b> a month, and the typical (median) plan runs <b>{money(t.statewide[0])}</b>. The good news baked into federal pricing rules: 26 is nearly the cheapest age you will ever be to insure — a 40-year-old pays a median {money(t.vs40)}, a 60-year-old {money(t.vs60)}.</p>
+    <p class="prov">Source: CMS Exchange Public Use Files · imported <b>{meta.import_latest}</b> · <a href="/texas/health-insurance-cost/methodology/">methodology</a></p>
+  </div>
+
+  <section>
+    <h2>What 26-year-olds pay across Texas metros</h2>
+    <table>
+      <thead><tr><th>Metro</th><th class="num">Lowest / month</th><th class="num">Median / month</th></tr></thead>
+      <tbody>
+        {metros.map(([name,v]) => <tr><td>{name}</td><td class="num">{money(v[1])}</td><td class="num">{money(v[0])}</td></tr>)}
+        <tr><td><b>Texas statewide</b></td><td class="num"><b>{money(t.statewide[1])}</b></td><td class="num"><b>{money(t.statewide[0])}</b></td></tr>
+      </tbody>
+    </table>
+    <p class="tablenote">One non-smoking 26-year-old, all metal levels, before subsidies. Your county's exact numbers: <a href="/texas/health-insurance-cost/">county lookup</a>.</p>
+  </section>
+
+  <section class="prose">
+    <h2>The deadline that actually matters</h2>
+    <p>Losing parental coverage is a <b>qualifying life event</b>: it opens a Special Enrollment Period, generally a 60-day window around the day your old coverage ends, when you can sign up outside the normal season. Miss the window and (barring another qualifying event) you wait for Open Enrollment in the fall — potentially months without coverage. Confirm your exact dates at HealthCare.gov as soon as you know when the parent plan ends.</p>
+    <h2>Ways to keep the bill down at 26</h2>
+    <ul>
+      <li><b>Being under 30 unlocks Catastrophic plans</b> — the lowest premiums on the market, built for worst-case protection rather than everyday care. That's where prices like {money(t.statewide[1])} live.</li>
+      <li><b>Bronze runs from about {money(t.bronze)}</b> and covers the essentials with a high deductible. See our <a href="/texas/bronze-vs-silver/">Bronze vs Silver breakdown</a> before defaulting to the cheapest.</li>
+      <li><b>Check the subsidy first.</b> Entry-level income often qualifies for a premium tax credit that cuts these prices — and if it does, extra cost-sharing discounts apply only on Silver plans (median Silver: {money(t.silver_med)}).</li>
+    </ul>
+  </section>
+
+  <div class="disclaim">Prices shown are <b>before</b> any premium tax credit. Many Texans qualify for a credit that lowers the monthly bill — but the enhanced pandemic-era subsidies ended on December 31, 2025, so most people pay more in {meta.plan_year} than in prior years. Check your exact after-subsidy price at HealthCare.gov.</div>
+</main>
+</Layout>

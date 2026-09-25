@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import meta from '../../data/meta.json';
+const ld = JSON.stringify({
+ "@context":"https://schema.org","@type":"Dataset",
+ "name":"Texas ACA Marketplace Premiums by County, Plan Year "+meta.plan_year,
+ "description":"County-level individual-market health insurance figures for all 254 Texas counties, derived from CMS Exchange Public Use Files: plan counts, insurer counts, and minimum/median monthly premiums at ages 21, 40 and 60.",
+ "url":"https://rateterrain.com/texas/health-insurance-data/",
+ "license":"https://rateterrain.com/texas/health-insurance-data/#license",
+ "creator":{"@type":"Organization","name":"RateTerrain","url":"https://rateterrain.com"},
+ "isBasedOn":"https://www.cms.gov/marketplace/resources/data/public-use-files",
+ "temporalCoverage":String(meta.plan_year),
+ "spatialCoverage":"Texas, United States",
+ "distribution":[{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl":"https://rateterrain.com/data/tx_health_marketplace_by_county_2026.csv"},
+                 {"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://rateterrain.com/data/tx_health_rating_areas.json"}]
+});
+---
+<Layout title={`Texas Health Insurance Data & Press Kit (${meta.plan_year}) — RateTerrain`} desc="Free downloadable dataset: premiums, plan and insurer counts for all 254 Texas counties from CMS filings, plus an embeddable county map. Free to reuse with attribution." path="/texas/health-insurance-data/">
+<script type="application/ld+json" set:html={ld}></script>
+<main class="wrap">
+  <div class="hero" style="padding-bottom:20px">
+    <p class="eyebrow">Open data · Press kit · Plan year {meta.plan_year}</p>
+    <h1>Data &amp; press: take the numbers with you</h1>
+    <p class="lede">Everything on this page is free to republish with attribution — built for journalists, researchers, and anyone who wants the receipts behind our <a href="/texas/health-insurance-cost-gaps-2026/">Texas insurance terrain study</a>.</p>
+  </div>
+
+  <section>
+    <h2>The county map</h2>
+    <p>What the cheapest available plan costs a 40-year-old in each of the 254 counties. Embed it, print it, or drop it into an article — the attribution line is baked in.</p>
+    <p><img src="/assets/tx-cheapest-plan-map-2026.svg" alt={`Choropleth map of Texas: lowest available monthly marketplace premium for a 40-year-old by county, plan year ${meta.plan_year}, ranging $320 to $581`} style="max-width:100%;height:auto;border:1px solid var(--contour)" loading="lazy" /></p>
+    <p class="tablenote">Download: <a href="/assets/tx-cheapest-plan-map-2026.svg" download>SVG (vector, 97 KB)</a> · <a href="/assets/tx-cheapest-plan-map-2026.png" download>PNG (1200px)</a>. Hover any county in the SVG for its figures.</p>
+  </section>
+
+  <section>
+    <h2>The dataset</h2>
+    <p>One CSV row per county: plan count, insurer count, and minimum/median monthly premiums at ages 21, 40 and 60 (plus median Silver at 40). Companion file: the official rating-area-to-county mapping as JSON.</p>
+    <p><a href="/data/tx_health_marketplace_by_county_2026.csv" download><b>tx_health_marketplace_by_county_2026.csv</b></a> — 254 rows<br/>
+    <a href="/data/tx_health_rating_areas.json" download><b>tx_health_rating_areas.json</b></a> — 27 rating areas, per 28 Tex. Admin. Code §3.504</p>
+  </section>
+
+  <section class="prose" id="license">
+    <h2>License &amp; how to cite</h2>
+    <p>Our derived figures are free to use, share, and republish, commercially or not, with attribution: <b>"RateTerrain analysis of CMS Exchange Public Use Files"</b> and a link to rateterrain.com. The underlying CMS files are U.S. federal public data. Premiums are full filed prices before any premium tax credit.</p>
+    <h2>For journalists</h2>
+    <p>Need a custom cut — one metro, one age band, year-over-year once {meta.plan_year+1} files land in late October? <a href="/contact/">Write us</a>; same-day turnaround for working press. Figures update with each federal data refresh (current build: imported {meta.import_latest}).</p>
+  </section>
+</main>
+</Layout>

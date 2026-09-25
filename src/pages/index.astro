@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import meta from '../data/meta.json';
+---
+<Layout title="RateTerrain — the lay of the land on what things cost" desc="Independent cost data from official public sources: real numbers, dated, with methodology. Starting with Texas health insurance." path="/">
+<main>
+  <div class="hero"><div class="wrap" style="position:relative">
+    <svg class="contours" width="100%" height="100%" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M-20 250 C 200 180, 340 300, 560 220 S 900 260, 1030 190" stroke="#d9e0d3" fill="none" stroke-width="1.5"/>
+      <path d="M-20 200 C 220 130, 360 250, 580 170 S 920 210, 1030 140" stroke="#d9e0d3" fill="none" stroke-width="1.5"/>
+      <path d="M-20 150 C 240 80, 380 200, 600 120 S 940 160, 1030 90" stroke="#d9e0d3" fill="none" stroke-width="1.5"/>
+    </svg>
+    <p class="eyebrow">Public data · Plain numbers</p>
+    <h1>The lay of the land on what things cost.</h1>
+    <p class="lede">RateTerrain turns official government data into clear, local cost answers — with the source, the date, and the method behind every number.</p>
+    <p class="prov">First terrain mapped: <a href="/texas/health-insurance-cost/">Texas health insurance</a> — <b>{meta.plans}</b> plans · <b>{meta.issuers}</b> insurers · <b>{meta.counties}</b> counties, plan year {meta.plan_year}.</p>
+  </div></div>
+</main>
+</Layout>
