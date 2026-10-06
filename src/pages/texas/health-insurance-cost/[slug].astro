@@ -63,5 +63,17 @@ const vsTxt = Math.abs(vsState) < 5 ? 'right at the Texas median' : (vsState>0 ?
     <p>{issuersLine}</p>
     <p>No insurer covers all of Texas, so this line-up is specific to {d.county} County. Compare nearby markets: {others.map((o,idx)=><span><a href={`/texas/health-insurance-cost/${o.slug}/`}>{o.county} County</a>{idx !== others.length-1 ? ' \u00b7 ' : ''}</span>)} — or the <a href="/texas/health-insurance-cost/">statewide view</a>.</p>
   </section>
+  <section>
+    <h2>Guides for {d.county} County shoppers</h2>
+    <ul>
+      <li><a href="/texas/bronze-vs-silver/">Bronze vs Silver vs Gold in Texas</a> — the premium gap against deductibles</li>
+      <li><a href="/texas/health-insurance-turning-26/">Turning 26 in Texas</a> — leaving a parent's plan: cost and deadlines</li>
+      <li><a href="/texas/health-insurance-early-retirement/">Retiring before 65 in Texas</a> — marketplace cost at ages 60–64</li>
+      <li><a href="/texas/health-insurance-self-employed/">Self-employed health insurance in Texas</a> — cost and the tax deduction</li>
+      <li><a href="/texas/cobra-vs-marketplace/">COBRA vs marketplace in Texas</a> — after a job change</li>
+      <li><a href="/texas/health-insurance-cost-gaps-2026/">Six gaps in the Texas insurance terrain</a> — data study</li>
+      <li><a href="/texas/health-insurance-data/">Texas health insurance dataset</a> — free county-level download</li>
+    </ul>
+  </section>
 </main>
 </Layout>
