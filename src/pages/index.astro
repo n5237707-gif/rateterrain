@@ -1,6 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import meta from '../data/meta.json';
+import counties from '../data/counties.json';
+import detail from '../data/county_detail.json';
+const byName = Object.fromEntries(counties.map(c => [c.county, c]));
+const pages = Object.values(detail)
+  .map(d => ({ slug: d.slug, county: d.county, c: byName[d.county] }))
+  .filter(p => p.c)
+  .sort((a, b) => a.county.localeCompare(b.county));
+const fmt = (v) => v == null ? '—' : `$${v.toFixed(2)}`;
 ---
 <Layout title="RateTerrain — the lay of the land on what things cost" desc="Independent cost data from official public sources: real numbers, dated, with methodology. Starting with Texas health insurance." path="/">
 <main>
@@ -15,5 +23,33 @@ import meta from '../data/meta.json';
     <p class="lede">RateTerrain turns official government data into clear, local cost answers — with the source, the date, and the method behind every number.</p>
     <p class="prov">First terrain mapped: <a href="/texas/health-insurance-cost/">Texas health insurance</a> — <b>{meta.plans}</b> plans · <b>{meta.issuers}</b> insurers · <b>{meta.counties}</b> counties, plan year {meta.plan_year}.</p>
   </div></div>
+
+  <div class="wrap">
+  <section>
+    <h2>Texas health insurance cost by county, plan year {meta.plan_year}</h2>
+    <p>Median monthly premium for a 40-year-old ranges from <b>${meta.min_med40}</b> to <b>${meta.max_med40}</b> across Texas. Start with the <a href="/texas/health-insurance-cost/">statewide lookup for all {meta.counties} counties</a>, or open a full county page:</p>
+    <table>
+      <thead><tr><th>County</th><th class="num">Plans</th><th class="num">Insurers</th><th class="num">Lowest, age 40</th><th class="num">Median, age 40</th></tr></thead>
+      <tbody>
+        {pages.map(p => <tr><td><a href={`/texas/health-insurance-cost/${p.slug}/`}>{p.county} County</a></td><td class="num">{p.c.plans}</td><td class="num">{p.c.issuers}</td><td class="num">{fmt(p.c.min40)}</td><td class="num">{fmt(p.c.med40)}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="tablenote">Full monthly prices for one non-smoking adult, before any subsidy. Source: CMS Exchange Public Use Files, imported {meta.import_latest} · <a href="/texas/health-insurance-cost/methodology/">methodology</a>.</p>
+  </section>
+
+  <section>
+    <h2>Guides and data</h2>
+    <ul>
+      <li><a href="/texas/health-insurance-cost-by-age/">Texas health insurance cost by age, 21 to 64+</a></li>
+      <li><a href="/texas/bronze-vs-silver/">Bronze vs Silver vs Gold in Texas</a> — premiums against deductibles</li>
+      <li><a href="/texas/health-insurance-turning-26/">Turning 26 in Texas</a> — cost and deadlines</li>
+      <li><a href="/texas/health-insurance-early-retirement/">Retiring before 65 in Texas</a> — cost at 60–64</li>
+      <li><a href="/texas/health-insurance-self-employed/">Self-employed health insurance in Texas</a> — cost and the tax deduction</li>
+      <li><a href="/texas/cobra-vs-marketplace/">COBRA vs marketplace in Texas</a></li>
+      <li><a href="/texas/health-insurance-cost-gaps-2026/">Six gaps in the Texas insurance terrain</a> — data study</li>
+      <li><a href="/texas/health-insurance-data/">Texas health insurance data &amp; press kit</a> — free dataset</li>
+    </ul>
+  </section>
+  </div>
 </main>
 </Layout>

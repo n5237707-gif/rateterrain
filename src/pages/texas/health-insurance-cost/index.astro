@@ -4,6 +4,7 @@ import meta from '../../../data/meta.json';
 import counties from '../../../data/counties.json';
 import detail from '../../../data/county_detail.json';
 const slugOf = Object.fromEntries(Object.values(detail).map(d=>[d.county,d.slug]));
+const countyPages = Object.values(detail).map(d => ({ slug: d.slug, county: d.county })).sort((a, b) => a.county.localeCompare(b.county));
 const top = [...counties].sort((a,b)=>b.plans-a.plans).slice(0,15);
 const fmt = (v) => v==null ? '—' : `$${v.toFixed(2)}`;
 ---
@@ -78,7 +79,7 @@ const fmt = (v) => v==null ? '—' : `$${v.toFixed(2)}`;
         {top.map(c => <tr><td>{slugOf[c.county] ? <a href={`/texas/health-insurance-cost/${slugOf[c.county]}/`}>{c.county}</a> : c.county}</td><td class="num">{c.plans}</td><td class="num">{c.issuers}</td><td class="num">{fmt(c.min40)}</td><td class="num">{fmt(c.med40)}</td><td class="num">{fmt(c.medSilver40)}</td></tr>)}
       </tbody>
     </table>
-    <p class="tablenote">All 254 counties are covered by the lookup tool above. Full county pages so far: Harris, Dallas, Tarrant, Bexar, and Travis — linked in the table.</p>
+    <p class="tablenote">All 254 counties are covered by the lookup tool above. Full county pages: {countyPages.map((p, i) => <>{i > 0 ? ' · ' : ''}<a href={`/texas/health-insurance-cost/${p.slug}/`}>{p.county}</a></>)}.</p>
   </section>
 
   <section>
